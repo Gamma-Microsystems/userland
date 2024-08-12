@@ -41,8 +41,8 @@
 #include <sirius/kbd.h>
 #include <sirius/pex.h>
 #include <sirius/yutani-ng.h>
-#include <sirius/yutani-ng-internal.h>
-#include <sirius/yutani-ng-server.h>
+#include <sirius/yutani-internal.h>
+#include <sirius/yutani-server.h>
 #include <sirius/hashmap.h>
 #include <sirius/list.h>
 #include <sirius/text.h>

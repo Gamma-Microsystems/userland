@@ -5,6 +5,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2021-2022 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <fcntl.h>
 #include <stdint.h>
@@ -22,8 +23,8 @@
 #include <sys/time.h>
 
 #include <sys/sysfunc.h>
-#include <toaru/list.h>
-#include <toaru/hashmap.h>
+#include <sirius/list.h>
+#include <sirius/hashmap.h>
 
 #define LINE_LEN 4096
 
@@ -735,7 +736,7 @@ void set_buffered(void) {
 
 int main (int argc, char * argv[]) {
 	/* Assume CPU count doesn't change... */
-	cpu_count = sysfunc(TOARU_SYS_FUNC_NPROC, NULL);
+	cpu_count = sysfunc(SIRIUS_SYS_FUNC_NPROC, NULL);
 
 	/* Initialize terminal for alt screen */
 	get_initial_termios();

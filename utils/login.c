@@ -23,7 +23,7 @@
 #include <sys/utsname.h>
 #include <sys/ioctl.h>
 
-#include <toaru/auth.h>
+#include <sirius/auth.h>
 
 #define LINE_LEN 1024
 
@@ -126,7 +126,7 @@ int main(int argc, char ** argv) {
 		tcsetattr(fileno(stdin), TCSAFLUSH, &old);
 		fprintf(stdout, "\n");
 
-		uid = toaru_auth_check_pass(username, password);
+		uid = sirius_auth_check_pass(username, password);
 
 		if (uid < 0) {
 			sleep(2);
@@ -147,7 +147,7 @@ do_fork:
 		setsid();
 		ioctl(STDIN_FILENO, TIOCSCTTY, &(int){1});
 		tcsetpgrp(STDIN_FILENO, getpid());
-		toaru_set_credentials(uid);
+		sirius_set_credentials(uid);
 		char * args[] = {
 			getenv("SHELL"),
 			NULL

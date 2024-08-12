@@ -2,7 +2,7 @@
  * @brief imgviewer - Display bitmaps in a graphical window.
  *
  * This is probably the 4th time I've (re)written a version of
- * this application... This uses the libtoaru_graphics sprite
+ * this application... This uses the libsirius_graphics sprite
  * functionality to load images, so it will support whatever
  * that ends up supporting - which at the time of writing is
  * just bitmaps of various types.
@@ -11,6 +11,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2018 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 
 #include <stdio.h>
@@ -22,10 +23,10 @@
 #include <getopt.h>
 #include <libgen.h>
 
-#include <toaru/yutani.h>
-#include <toaru/graphics.h>
-#include <toaru/decorations.h>
-#include <toaru/menu.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/graphics.h>
+#include <sirius/decorations.h>
+#include <sirius/menu.h>
 
 /* Pointer to graphics memory */
 static yutani_t * yctx;

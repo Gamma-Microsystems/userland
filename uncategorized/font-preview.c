@@ -5,17 +5,18 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2021 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include <toaru/yutani.h>
-#include <toaru/graphics.h>
-#include <toaru/decorations.h>
-#include <toaru/menu.h>
-#include <toaru/text.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/graphics.h>
+#include <sirius/decorations.h>
+#include <sirius/menu.h>
+#include <sirius/text.h>
 
 /* Pointer to graphics memory */
 static yutani_t * yctx;
@@ -208,4 +209,3 @@ int main(int argc, char * argv[]) {
 
 	return 0;
 }
-

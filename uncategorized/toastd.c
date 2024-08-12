@@ -10,18 +10,19 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2021 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <unistd.h>
 #include <sched.h>
 #include <time.h>
 #include <sys/fswait.h>
-#include <toaru/pex.h>
-#include <toaru/yutani.h>
-#include <toaru/markup_text.h>
-#include <toaru/graphics.h>
-#include <toaru/json.h>
-#include <toaru/list.h>
+#include <sirius/pex.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/markup_text.h>
+#include <sirius/graphics.h>
+#include <sirius/json.h>
+#include <sirius/list.h>
 
 typedef struct JSON_Value JSON_Value;
 

@@ -16,14 +16,14 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include <toaru/auth.h>
-#include <toaru/yutani.h>
-#include <toaru/graphics.h>
-#include <toaru/text.h>
-#include <toaru/button.h>
+#include <sirius/auth.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/graphics.h>
+#include <sirius/text.h>
+#include <sirius/button.h>
 
 #define main __main_unused
-#include "sudo.c"
+#include "permit.c"
 #undef main
 
 #define FONT_SIZE_TITLE 18

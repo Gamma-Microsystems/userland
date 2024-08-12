@@ -8,15 +8,16 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2018 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
 #include <sys/wait.h>
-#include <toaru/auth.h>
-#include <toaru/yutani.h>
-#include <toaru/trace.h>
+#include <sirius/auth.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/trace.h>
 #define TRACE_APP_NAME "live-session"
 
 int main(int argc, char * argv[]) {
@@ -28,7 +29,7 @@ int main(int argc, char * argv[]) {
 
 	int _session_pid = fork();
 	if (!_session_pid) {
-		toaru_set_credentials(1000);
+		sirius_set_credentials(1000);
 		char * args[] = {"/bin/session", NULL};
 		execvp(args[0], args);
 

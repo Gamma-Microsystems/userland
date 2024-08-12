@@ -7,6 +7,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2013-2015 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdlib.h>
 #include <assert.h>
@@ -17,9 +18,9 @@
 
 #include <sys/wait.h>
 
-#include <toaru/yutani.h>
-#include <toaru/auth.h>
-#include <toaru/trace.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/auth.h>
+#include <sirius/trace.h>
 #define TRACE_APP_NAME "glogin"
 
 int main (int argc, char ** argv) {
@@ -94,7 +95,7 @@ int main (int argc, char ** argv) {
 					if (!username || !password) {
 						fprintf(rep, "FAIL\n");
 					} else {
-						uid = toaru_auth_check_pass(username, password);
+						uid = sirius_auth_check_pass(username, password);
 						if (uid < 0) {
 							fprintf(rep, "FAIL\n");
 							fflush(rep);
@@ -119,7 +120,7 @@ int main (int argc, char ** argv) {
 
 		pid_t _session_pid = fork();
 		if (!_session_pid) {
-			toaru_set_credentials(uid);
+			sirius_set_credentials(uid);
 			char * args[] = {"/bin/session", NULL};
 			execvp(args[0], args);
 			exit(1);

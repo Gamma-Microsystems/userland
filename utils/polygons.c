@@ -17,8 +17,8 @@
 
 #include <sys/fswait.h>
 
-#include <toaru/yutani.h>
-#include <toaru/graphics.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/graphics.h>
 
 #define min(a,b) ((a) < (b) ? (a) : (b))
 

@@ -8,6 +8,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2018 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@
 #include <getopt.h>
 #include <errno.h>
 #include <ctype.h>
-#include <toaru/list.h>
+#include <sirius/list.h>
 
 int compare(const char * a, const char * b) {
 	while (1) {

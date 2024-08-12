@@ -12,6 +12,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2013-2021 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdlib.h>
 #include <assert.h>
@@ -29,16 +30,16 @@
 /* auto-dep: export-dynamic */
 #include <dlfcn.h>
 
-#include <toaru/yutani.h>
-#include <toaru/yutani-internal.h>
-#include <toaru/graphics.h>
-#include <toaru/hashmap.h>
-#include <toaru/icon_cache.h>
-#include <toaru/menu.h>
-#include <toaru/text.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/yutani-internal.h>
+#include <sirius/graphics.h>
+#include <sirius/hashmap.h>
+#include <sirius/icon_cache.h>
+#include <sirius/menu.h>
+#include <sirius/text.h>
 
 /* Several theming defines are in here */
-#include <toaru/panel.h>
+#include <sirius/panel.h>
 
 /* These are local to the core panel, so we don't need to put them in the header */
 #define ALTTAB_WIDTH  250
@@ -853,7 +854,7 @@ int main (int argc, char ** argv) {
 		char lib_name[200];
 		char func_name[200];
 
-		snprintf(lib_name, 200, "libtoaru_panel_%s.so", *widget);
+		snprintf(lib_name, 200, "libsirius_panel_%s.so", *widget);
 		snprintf(func_name, 200, "widget_init_%s", *widget);
 
 		void * lib = dlopen(lib_name, 0);
@@ -959,4 +960,3 @@ int main (int argc, char ** argv) {
 
 	return 0;
 }
-

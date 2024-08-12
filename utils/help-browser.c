@@ -2,26 +2,27 @@
  * @brief help-browser - Display documentation.
  *
  * This is a work-in-progress reimplementation of the help browser
- * from mainline ToaruOS. It is currently incomplete.
+ * from mainline SiriusOS. It is currently incomplete.
  *
  * Eventually, this should be a rich text document browser, almost
  * akin to a web browser. Right now it just says "Hello, world."
  *
  * @copyright
- * This file is part of ToaruOS and is released under the terms
+ * This file is part of SiriusOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2018-2020 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <unistd.h>
 #include <dirent.h>
 
-#include <toaru/yutani.h>
-#include <toaru/graphics.h>
-#include <toaru/decorations.h>
-#include <toaru/menu.h>
-#include <toaru/text.h>
-#include <toaru/markup.h>
+#include <sirius/yutani.h>
+#include <sirius/graphics.h>
+#include <sirius/decorations.h>
+#include <sirius/menu.h>
+#include <sirius/text.h>
+#include <sirius/markup.h>
 
 #define APPLICATION_TITLE "Help Browser"
 #define HELP_DIR "/usr/share/help"
@@ -461,12 +462,12 @@ static void _menu_action_back(struct MenuEntry * entry) {
 static void _menu_action_forward(struct MenuEntry * entry) {
 	/* go forward */
 }
-#endif 
+#endif
 
 static void _menu_action_about(struct MenuEntry * entry) {
 	/* Show About dialog */
 	char about_cmd[1024] = "\0";
-	strcat(about_cmd, "about \"About Help Browser\" /usr/share/icons/48/help.png \"ToaruOS Help Browser\" \"© 2018-2020 K. Lange\n-\nPart of ToaruOS, which is free software\nreleased under the NCSA/University of Illinois\nlicense.\n-\n%https://toaruos.org\n%https://github.com/klange/toaruos\" ");
+	strcat(about_cmd, "about \"About Help Browser\" /usr/share/icons/48/help.png \"SiriusOS Help Browser\" \"© 2018-2020 K. Lange\n© 2024 Gamma Microsystems\n-\nPart of SiriusOS, which is free software\nreleased under the NCSA/University of Illinois\nlicense.\n-\n%https://gamma63.w10.site/html5/index.html\n%https://github.com/Gamma-Microsystems/SiriusOS\" ");
 	char coords[100];
 	sprintf(coords, "%d %d &", (int)main_window->x + (int)main_window->width / 2, (int)main_window->y + (int)main_window->height / 2);
 	strcat(about_cmd, coords);

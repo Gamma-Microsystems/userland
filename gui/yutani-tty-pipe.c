@@ -4,8 +4,8 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 
-#include <toaru/yutani.h>
-#include <toaru/yutani-internal.h>
+#include <sirius/yutani.h>
+#include <sirius/yutani-internal.h>
 
 yutani_t * yctx;
 int quiet = 0;
@@ -88,4 +88,3 @@ int main(int argc, char * argv[]) {
 
 	return 0;
 }
-

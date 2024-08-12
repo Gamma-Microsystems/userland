@@ -26,7 +26,7 @@
 #include <sys/fswait.h>
 #include <sys/sysfunc.h>
 
-#include <sirius/yutani.h>
+#include <sirius/yutani-ng.h>
 #include <sirius/graphics.h>
 #include <sirius/decorations.h>
 #include <sirius/text.h>
@@ -695,4 +695,3 @@ int main (int argc, char ** argv) {
 
 	return 0;
 }
-

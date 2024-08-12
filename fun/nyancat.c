@@ -1,5 +1,6 @@
 /* vim: tabstop=4 shiftwidth=4 noexpandtab
  * Copyright (c) 2011-2018 K. Lange.  All rights reserved.
+ * Copyright (C) 2024 Gamma Microsystems. All rights reserved
  *
  * Developed by:            K. Lange
  *                          http://gitlab.com/klange/nyancat
@@ -543,7 +544,7 @@ int main(int argc, char ** argv) {
 							sb_len  = 0;
 							memset(sb, 0, sizeof(sb));
 							break;
-						case IAC: 
+						case IAC:
 							/* IAC IAC? That's probably not right. */
 							done = 2;
 							break;
@@ -593,7 +594,7 @@ int main(int argc, char ** argv) {
 	/* Do our terminal detection */
 	if (strstr(term, "xterm")) {
 		ttype = 1; /* 256-color, spaces */
-	} else if (strstr(term, "toaru")) {
+	} else if (strstr(term, "toaru || sirius")) {
 		ttype = 1; /* emulates xterm */
 	} else if (strstr(term, "linux")) {
 		ttype = 3; /* Spaces and blink attribute */

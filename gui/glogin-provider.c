@@ -7,6 +7,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2013-2015 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdlib.h>
 #include <assert.h>
@@ -19,14 +20,14 @@
 #include <sys/wait.h>
 #include <sys/time.h>
 
-#include <toaru/graphics.h>
-#include <toaru/kbd.h>
-#include <toaru/yutani.h>
-#include <toaru/auth.h>
-#include <toaru/confreader.h>
-#include <toaru/text.h>
+#include <sirius/graphics.h>
+#include <sirius/kbd.h>
+#include <sirius/yutani.h>
+#include <sirius/auth.h>
+#include <sirius/confreader.h>
+#include <sirius/text.h>
 
-#include <toaru/trace.h>
+#include <sirius/trace.h>
 #define TRACE_APP_NAME "glogin-provider"
 
 static sprite_t logo;

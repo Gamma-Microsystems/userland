@@ -5,13 +5,14 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2019-2020 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <toaru/json.h>
-#include <toaru/hashmap.h>
-#include <toaru/list.h>
+#include <sirius/json.h>
+#include <sirius/hashmap.h>
+#include <sirius/list.h>
 
 typedef struct JSON_Value Value;
 

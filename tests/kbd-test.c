@@ -2,18 +2,19 @@
  * @brief Keyboard test tool
  *
  * XXX This probably doesn't work anymore. It uses the VGA text mode
- *     region but it doesn't map it; legacy interfaces in toaru32
+ *     region but it doesn't map it; legacy interfaces in sirius32
  *     just mapped this accessible to userspace...
  *
  * @copyright
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2018 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <toaru/kbd.h>
+#include <sirius/kbd.h>
 
 static unsigned short * textmemptr = (unsigned short *)0xB8000;
 static void placech(unsigned char c, int x, int y, int attr) {

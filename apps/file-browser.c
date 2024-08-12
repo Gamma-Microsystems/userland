@@ -10,6 +10,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2018-2022 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <unistd.h>
@@ -26,14 +27,14 @@
 #include <sys/wait.h>
 #include <sys/fswait.h>
 
-#include <toaru/yutani.h>
-#include <toaru/graphics.h>
-#include <toaru/decorations.h>
-#include <toaru/menu.h>
-#include <toaru/icon_cache.h>
-#include <toaru/list.h>
-#include <toaru/text.h>
-#include <toaru/button.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/graphics.h>
+#include <sirius/decorations.h>
+#include <sirius/menu.h>
+#include <sirius/icon_cache.h>
+#include <sirius/list.h>
+#include <sirius/text.h>
+#include <sirius/button.h>
 
 #define APPLICATION_TITLE "File Browser"
 #define SCROLL_AMOUNT 120
@@ -542,7 +543,7 @@ static void load_directory(const char * path, int modifies_history) {
 	struct dirent * ent = readdir(dirp);
 	while (ent != NULL) {
 		if (ent->d_name[0] == '.' &&
-			(ent->d_name[1] == '\0' || 
+			(ent->d_name[1] == '\0' ||
 			 (ent->d_name[1] == '.' &&
 			  ent->d_name[2] == '\0'))) {
 			/* skip . and .. */
@@ -1465,7 +1466,7 @@ static void _menu_action_delete(struct MenuEntry * entry) {
 static void _menu_action_about(struct MenuEntry * entry) {
 	/* Show About dialog */
 	char about_cmd[1024] = "\0";
-	strcat(about_cmd, "about \"About File Browser\" /usr/share/icons/48/folder.png \"ToaruOS File Browser\" \"© 2018-2022 K. Lange\n-\nPart of ToaruOS, which is free software\nreleased under the NCSA/University of Illinois\nlicense.\n-\n%https://toaruos.org\n%https://github.com/klange/toaruos\" ");
+	strcat(about_cmd, "about \"About File Browser\" /usr/share/icons/48/folder.png \"SiriusOS File Browser\" \"© 2018-2022 K. Lange\n-\nPart of SiriusOS, which is free software\nreleased under the NCSA/University of Illinois\nlicense.\n-\n%https://gamma63.w10.site/html5/index.html\n%https://github.com/Gamma-Microsystems/SiriusOS" ");
 	char coords[100];
 	sprintf(coords, "%d %d &", (int)main_window->x + (int)main_window->width / 2, (int)main_window->y + (int)main_window->height / 2);
 	strcat(about_cmd, coords);

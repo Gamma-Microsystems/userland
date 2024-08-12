@@ -1,5 +1,5 @@
 /**
- * @brief Package Management Utility for SiriusOS (aka msk for toaru os)
+ * @brief Package Management Utility for SiriusOS (aka sirpkg for toaru os)
  *
  * Packages can optionally be uncompressed, which is also
  * important for bootstrapping at the moment.
@@ -16,17 +16,17 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#include <toaru/confreader.h>
-#include <toaru/list.h>
-#include <toaru/hashmap.h>
+#include <sirius/confreader.h>
+#include <sirius/list.h>
+#include <sirius/hashmap.h>
 
-#define SIRPKG_VERSION "1.0.1"
+#define SIRPKG_VERSION "1.0"
 #define VAR_PATH "/var/sirpkg"
 #define LOCK_PATH "/var/run/sirpkg.lock"
 
-static confreader_t * msk_config = NULL;
-static confreader_t * msk_manifest = NULL;
-static hashmap_t *    msk_installed = NULL;
+static confreader_t * sirpkg_config = NULL;
+static confreader_t * sirpkg_manifest = NULL;
+static hashmap_t *    sirpkg_installed = NULL;
 static int lock_fd = -1;
 
 static int verbose = 0;
@@ -41,7 +41,7 @@ static void needs_lock(void) {
 	if (lock_fd == -1) {
 		lock_fd = open(LOCK_PATH, O_RDWR|O_CREAT|O_EXCL);
 		if (lock_fd < 0) {
-			fprintf(stderr, "msk: failed to obtain exclusive lock\n");
+			fprintf(stderr, "sirpkg: failed to obtain exclusive lock\n");
 			exit(1);
 		}
 		atexit(release_lock);
@@ -82,7 +82,7 @@ static int compare_version_strings(char * current, char * candidate) {
 }
 
 static void read_config(void) {
-	confreader_t * conf = confreader_load("/etc/msk.conf");
+	confreader_t * conf = confreader_load("/etc/sirpkg.conf");
 	if (!conf) {
 		fprintf(stderr, "failed to read configuration file\n");
 		exit(1);
@@ -92,25 +92,25 @@ static void read_config(void) {
 		verbose = 1;
 	}
 
-	msk_config = conf;
+	sirpkg_config = conf;
 }
 
 static void read_manifest(int required) {
 	confreader_t * conf = confreader_load(VAR_PATH "/manifest");
 	if (!conf) {
 		if (required) {
-			fprintf(stderr, "no manifest; try `msk update` first\n");
+			fprintf(stderr, "no manifest; try `sirpkg update` first\n");
 			exit(1);
 		} else {
 			conf = confreader_create_empty();
 		}
 	}
 
-	msk_manifest = conf;
+	sirpkg_manifest = conf;
 }
 
 static void read_installed(void) {
-	msk_installed = hashmap_create(10);
+	sirpkg_installed = hashmap_create(10);
 
 	FILE * installed = fopen(VAR_PATH "/installed", "r");
 	if (!installed) return;
@@ -131,7 +131,7 @@ static void read_installed(void) {
 		*eqeq = '\0';
 		char * version = eqeq+2;
 
-		hashmap_set(msk_installed, tmp, strdup(version));
+		hashmap_set(sirpkg_installed, tmp, strdup(version));
 	}
 }
 
@@ -182,11 +182,11 @@ static int update_stores(int argc, char * argv[]) {
 	make_var();
 
 	confreader_t * manifest_out = confreader_create_empty();
-	hashmap_t * remotes = hashmap_get(msk_config->sections, "remotes");
+	hashmap_t * remotes = hashmap_get(sirpkg_config->sections, "remotes");
 
 	int one_success = 0;
 
-	char * order = strdup(confreader_getd(msk_config, "", "remote_order", ""));
+	char * order = strdup(confreader_getd(sirpkg_config, "", "remote_order", ""));
 	char * save;
 	char * tok = strtok_r(order, ",", &save);
 	do {
@@ -209,13 +209,13 @@ static int update_stores(int argc, char * argv[]) {
 			}
 		} else {
 			char cmd[512];
-			sprintf(cmd, "fetch -vo /tmp/.msk_remote_%s %s/%smanifest", remote_name, remote_path, manifest_prefix);
+			sprintf(cmd, "fetch -vo /tmp/.sirpkg_remote_%s %s/%smanifest", remote_name, remote_path, manifest_prefix);
 			fprintf(stderr, "Downloading remote manifest '%s'...\n", remote_name);
 			if (system(cmd)) {
 				fprintf(stderr, "Skipping unavailable remote manifest '%s' (%s).\n", remote_name, remote_path);
 				goto _next;
 			}
-			sprintf(cmd, "/tmp/.msk_remote_%s", remote_name);
+			sprintf(cmd, "/tmp/.sirpkg_remote_%s", remote_name);
 			manifest = confreader_load(cmd);
 		}
 
@@ -266,16 +266,16 @@ static int list_contains(list_t * list, char * key) {
 }
 
 static int process_package(list_t * pkgs, char * name) {
-	if (hashmap_has(msk_installed, name)) return 0;
+	if (hashmap_has(sirpkg_installed, name)) return 0;
 	if (list_contains(pkgs, name)) return 0;
 
-	if (!hashmap_has(msk_manifest->sections, name)) {
+	if (!hashmap_has(sirpkg_manifest->sections, name)) {
 		fprintf(stderr, "don't know how to install '%s'\n", name);
 		return 1;
 	}
 
 	/* Gather dependencies */
-	char * tmp  = confreader_get(msk_manifest, name, "dependencies");
+	char * tmp  = confreader_get(sirpkg_manifest, name, "dependencies");
 	if (strlen(tmp)) {
 		char * deps = strdup(tmp);
 		char * save;
@@ -294,28 +294,28 @@ static int process_package(list_t * pkgs, char * name) {
 
 static int install_package(char * pkg) {
 
-	char * type = confreader_getd(msk_manifest, pkg, "type", "");
-	char * msk_remote = confreader_get(msk_manifest, pkg, "remote_path");
+	char * type = confreader_getd(sirpkg_manifest, pkg, "type", "");
+	char * sirpkg_remote = confreader_get(sirpkg_manifest, pkg, "remote_path");
 
-	if (strstr(msk_remote, "http:") == msk_remote || strstr(msk_remote, "https:") == msk_remote) {
-		char * source = confreader_get(msk_manifest, pkg, "source");
+	if (strstr(sirpkg_remote, "http:") == sirpkg_remote || strstr(sirpkg_remote, "https:") == sirpkg_remote) {
+		char * source = confreader_get(sirpkg_manifest, pkg, "source");
 		if (source) {
 			fprintf(stderr, "Download %s...\n", pkg);
 			char cmd[1024];
-			sprintf(cmd, "fetch -o /tmp/msk.file -v %s/%s", msk_remote,
+			sprintf(cmd, "fetch -o /tmp/sirpkg.file -v %s/%s", sirpkg_remote,
 					source);
 			int status;
 			if ((status = system(cmd))) {
 				return status;
 			}
-			hashmap_set(hashmap_get(msk_manifest->sections, pkg), "source", "/tmp/msk.file");
+			hashmap_set(hashmap_get(sirpkg_manifest->sections, pkg), "source", "/tmp/sirpkg.file");
 		}
-	} else if (msk_remote[0] == '/') {
-		char * source = confreader_get(msk_manifest, pkg, "source");
+	} else if (sirpkg_remote[0] == '/') {
+		char * source = confreader_get(sirpkg_manifest, pkg, "source");
 		if (source) {
-			char * pkg_name = malloc(strlen(msk_remote) + strlen(source) + 2);
-			sprintf(pkg_name, "%s/%s", msk_remote, source);
-			hashmap_set(hashmap_get(msk_manifest->sections, pkg), "source", pkg_name);
+			char * pkg_name = malloc(strlen(sirpkg_remote) + strlen(source) + 2);
+			sprintf(pkg_name, "%s/%s", sirpkg_remote, source);
+			hashmap_set(hashmap_get(sirpkg_manifest->sections, pkg), "source", pkg_name);
 		}
 	}
 
@@ -326,17 +326,17 @@ static int install_package(char * pkg) {
 
 		if (verbose) {
 			fprintf(stderr, "  - Copy file '%s' to '%s' and set its mask to '%s'\n",
-					confreader_get(msk_manifest, pkg, "source"),
-					confreader_get(msk_manifest, pkg, "destination"),
-					confreader_get(msk_manifest, pkg, "mask"));
+					confreader_get(sirpkg_manifest, pkg, "source"),
+					confreader_get(sirpkg_manifest, pkg, "destination"),
+					confreader_get(sirpkg_manifest, pkg, "mask"));
 		}
 
 		char cmd[1024];
 		sprintf(cmd, "cp %s %s; chmod 0%s %s",
-				confreader_get(msk_manifest, pkg, "source"),
-				confreader_get(msk_manifest, pkg, "destination"),
-				confreader_get(msk_manifest, pkg, "mask"),
-				confreader_get(msk_manifest, pkg, "destination"));
+				confreader_get(sirpkg_manifest, pkg, "source"),
+				confreader_get(sirpkg_manifest, pkg, "destination"),
+				confreader_get(sirpkg_manifest, pkg, "mask"),
+				confreader_get(sirpkg_manifest, pkg, "destination"));
 
 		int status;
 		if ((status = system(cmd))) {
@@ -349,14 +349,14 @@ static int install_package(char * pkg) {
 
 		if (verbose) {
 			fprintf(stderr, "  - Extract '%s' to '%s'\n",
-					confreader_get(msk_manifest, pkg, "source"),
-					confreader_get(msk_manifest, pkg, "destination"));
+					confreader_get(sirpkg_manifest, pkg, "source"),
+					confreader_get(sirpkg_manifest, pkg, "destination"));
 		}
 
 		char cmd[1024];
 		sprintf(cmd, "cd %s; tar -xf %s",
-				confreader_get(msk_manifest, pkg, "destination"),
-				confreader_get(msk_manifest, pkg, "source"));
+				confreader_get(sirpkg_manifest, pkg, "destination"),
+				confreader_get(sirpkg_manifest, pkg, "source"));
 
 		int status;
 		if ((status = system(cmd))) {
@@ -369,14 +369,14 @@ static int install_package(char * pkg) {
 
 		if (verbose) {
 			fprintf(stderr, "  - Extract (compressed) '%s' to '%s'\n",
-					confreader_get(msk_manifest, pkg, "source"),
-					confreader_get(msk_manifest, pkg, "destination"));
+					confreader_get(sirpkg_manifest, pkg, "source"),
+					confreader_get(sirpkg_manifest, pkg, "destination"));
 		}
 
 		char cmd[1024];
 		sprintf(cmd, "cd %s; tar -xzf %s",
-				confreader_get(msk_manifest, pkg, "destination"),
-				confreader_get(msk_manifest, pkg, "source"));
+				confreader_get(sirpkg_manifest, pkg, "destination"),
+				confreader_get(sirpkg_manifest, pkg, "source"));
 
 		int status;
 		if ((status = system(cmd))) {
@@ -392,8 +392,8 @@ static int install_package(char * pkg) {
 		return 1;
 	}
 
-	char * source = confreader_get(msk_manifest, pkg, "source");
-	if (source && !strcmp(source, "/tmp/msk.file")) {
+	char * source = confreader_get(sirpkg_manifest, pkg, "source");
+	if (source && !strcmp(source, "/tmp/sirpkg.file")) {
 		char cmd[1024];
 		sprintf(cmd, "rm %s", source);
 		int status;
@@ -403,7 +403,7 @@ static int install_package(char * pkg) {
 		}
 	}
 
-	char * post = confreader_getd(msk_manifest, pkg, "post", "");
+	char * post = confreader_getd(sirpkg_manifest, pkg, "post", "");
 	if (strlen(post)) {
 		int status;
 		if ((status = system(post))) {
@@ -414,7 +414,7 @@ static int install_package(char * pkg) {
 
 	/* Mark as installed */
 	FILE * installed = fopen(VAR_PATH "/installed", "a");
-	fprintf(installed, "%s==%s\n", pkg, confreader_get(msk_manifest, pkg, "version"));
+	fprintf(installed, "%s==%s\n", pkg, confreader_get(sirpkg_manifest, pkg, "version"));
 	fclose(installed);
 
 	return 0;
@@ -470,12 +470,12 @@ static int list_packages(int argc, char * argv[]) {
 	read_installed();
 
 	/* Go through sections */
-	list_t * packages = hashmap_keys(msk_manifest->sections);
+	list_t * packages = hashmap_keys(sirpkg_manifest->sections);
 	foreach(node, packages) {
 		char * name = node->value;
 		if (!strlen(name)) continue; /* skip empty section */
-		char * desc = confreader_get(msk_manifest, name, "description");
-		fprintf(stderr, " %c %20s %s\n", hashmap_has(msk_installed, name) ? 'I' : ' ', name, desc);
+		char * desc = confreader_get(sirpkg_manifest, name, "description");
+		fprintf(stderr, " %c %20s %s\n", hashmap_has(sirpkg_installed, name) ? 'I' : ' ', name, desc);
 		/* TODO: Installation status */
 	}
 
@@ -491,12 +491,12 @@ static int count_packages(int argc, char * argv[]) {
 	int available = 0;
 
 	/* Go through sections */
-	list_t * packages = hashmap_keys(msk_manifest->sections);
+	list_t * packages = hashmap_keys(sirpkg_manifest->sections);
 	foreach(node, packages) {
 		char * name = node->value;
 		if (!strlen(name)) continue; /* skip empty section */
 		available++;
-		if (hashmap_has(msk_installed, name)) {
+		if (hashmap_has(sirpkg_installed, name)) {
 			installed++;
 		}
 	}
@@ -506,7 +506,7 @@ static int count_packages(int argc, char * argv[]) {
 }
 
 static int version(void) {
-	fprintf(stderr, "msk " MSK_VERSION "\n");
+	fprintf(stderr, "sirpkg " MSK_VERSION "\n");
 	return 0;
 }
 
@@ -530,4 +530,3 @@ int main(int argc, char * argv[]) {
 	}
 
 }
-

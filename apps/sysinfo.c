@@ -15,7 +15,7 @@
  *   hostname
  *   uname -sr
  *   uptime -p
- *   msk count
+ *   sirpkg count
  *   sh -v
  *   yutani-query resolution
  *   font-tool -n
@@ -93,10 +93,10 @@ int main(int argc, char * argv[]) {
 	prog_lines[i] = "uptime -p";
 	sprintf(data_lines[i++], C_A "Uptime: " C_O);
 
-	prog_lines[i] = "msk count";
+	prog_lines[i] = "sirpkg count";
 	sprintf(data_lines[i++], C_A "Packages: " C_O);
 
-	prog_lines[i] = "esh -v";
+	prog_lines[i] = "nesh -v";
 	sprintf(data_lines[i++], C_A "Shell: " C_O);
 
 	prog_lines[i] = "yutani-query resolution";

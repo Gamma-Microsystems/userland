@@ -25,7 +25,7 @@
 
 int main(int argc, char * argv[]) {
 
-	if (system("qemu-fwcfg -q opt/org.toaruos.displayharness") != 0) {
+	if (system("qemu-fwcfg -q opt/org.siriusos.displayharness") != 0) {
 		fprintf(stderr, "%s: display harness not enabled\n", argv[0]);
 		return 1;
 	}

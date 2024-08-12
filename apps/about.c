@@ -106,7 +106,7 @@ static void init_default(void) {
 	copyright_str[3] = "SiriusOS is free software released under the";
 	copyright_str[4] = "NCSA/University of Illinois license.";
 	copyright_str[5] = "-";
-	copyright_str[6] = "%https://gamma63.w10.site/progressnet/sirmain.html";
+	copyright_str[6] = "%https://gamma63.w10.site/html5/index.html";
 	copyright_str[7] = "%https://github.com/Gamma-Microsystems/SiriusOS";
 }
 

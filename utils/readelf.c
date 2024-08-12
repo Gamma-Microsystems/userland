@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <getopt.h>
-#ifdef __toaru__
+#ifdef __sirius__
 #include <kernel/elf.h>
 #else
 #include "../base/usr/include/kernel/elf.h"

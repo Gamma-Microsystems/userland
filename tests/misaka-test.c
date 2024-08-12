@@ -5,6 +5,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2021 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,17 +13,7 @@
 #include <sched.h>
 #include <sys/wait.h>
 
-#include <toaru/graphics.h>
-
-#include <kuroko/kuroko.h>
-#include <kuroko/vm.h>
-
-static void demo_runKurokoSnippet(void) {
-	krk_initVM(0);
-	krk_startModule("__main__");
-	krk_interpret("import kuroko\nprint('Kuroko',kuroko.version)\n", "<stdin>");
-	krk_freeVM();
-}
+#include <sirius/graphics.h>
 
 static void demo_drawWallpaper(void) {
 	/* Set up a wrapper context for the framebuffer */
@@ -42,7 +33,6 @@ static void demo_drawWallpaper(void) {
 
 int main(int argc, char * argv[]) {
 	demo_drawWallpaper();
-	demo_runKurokoSnippet();
 
 	//execve("/bin/kuroko",(char*[]){"kuroko",NULL},(char*[]){NULL});
 	char * args[] = {

@@ -16,6 +16,7 @@
  * This file is part of ToaruOS and is released under the terms
  * of the NCSA / University of Illinois License - see LICENSE.md
  * Copyright (C) 2015 K. Lange
+ * Copyright (C) 2024 Gamma Microsystems
  */
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,8 +28,8 @@
 #include <sched.h>
 #include <sys/time.h>
 
-#include <toaru/yutani.h>
-#include <toaru/graphics.h>
+#include <sirius/yutani-ng.h>
+#include <sirius/graphics.h>
 
 #define GAME_PATH "/usr/share/games/pong"
 
@@ -257,7 +258,7 @@ int main (int argc, char ** argv) {
 				case YUTANI_MSG_KEY_EVENT:
 					{
 						struct yutani_msg_key_event * ke = (void*)m->data;
-						
+
 						if (ke->event.key == 'q' && ke->event.action == KEY_ACTION_DOWN) {
 							should_exit = 1;
 						}

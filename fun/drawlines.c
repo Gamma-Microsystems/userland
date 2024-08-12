@@ -21,7 +21,7 @@
 
 #include <sys/fswait.h>
 
-#include <sirius/yutani.h>
+#include <sirius/yutani-ng.h>
 #include <sirius/graphics.h>
 
 static int left, top, width, height;
